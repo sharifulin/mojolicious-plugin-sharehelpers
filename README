@@ -1,14 +1,14 @@
 NAME
 
-Mojolicious::Plugin::Share - Mojolicious Plugin for generate share url and button (Twitter, Facebook, Buzz, VKontakte)
+Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte)
 
 SYNOPSIS
 
   # Mojolicious
-  $self->plugin('share');
+  $self->plugin('share_helpers');
 
   # Mojolicious::Lite
-  plugin 'share';
+  plugin 'share_helpers';
 
   # share urls:
   <a href="<%= share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
@@ -41,21 +41,21 @@ SUPPORT AND DOCUMENTATION
 After installing, you can find documentation for this module with the
 perldoc command.
 
-    perldoc Mojolicious::Plugin::Share
+    perldoc Mojolicious::Plugin::ShareHelpers
 
 You can also look for information at:
 
     RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Mojolicious-Plugin-Share
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Mojolicious-plugin-sharehelpers
 
     AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Mojolicious-Plugin-Share
+        http://annocpan.org/dist/Mojolicious-plugin-sharehelpers
 
     CPAN Ratings
-        http://cpanratings.perl.org/d/Mojolicious-Plugin-Share
+        http://cpanratings.perl.org/d/Mojolicious-plugin-sharehelpers
 
     Search CPAN
-        http://search.cpan.org/dist/Mojolicious-Plugin-Share/
+        http://search.cpan.org/dist/Mojolicious-plugin-sharehelpers/
 
 
 LICENSE AND COPYRIGHT
