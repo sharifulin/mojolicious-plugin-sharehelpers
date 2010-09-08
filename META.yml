@@ -1,0 +1,30 @@
+---
+abstract: 'for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte)'
+author:
+  - 'Anatoly Sharifulin <sharifulin@gmail.com>'
+build_requires:
+  Test::More: 0
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
+keywords:
+  - mojo
+  - mojolicious
+  - share
+  - helper
+  - plugin
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Mojolicious-Plugin-ShareHelpers
+provides:
+  Mojolicious::Plugin::ShareHelpers:
+    file: lib/Mojolicious/Plugin/ShareHelpers.pm
+    version: 0.01
+requires:
+  Mojolicious: 0
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: http://github.com/sharifulin/Mojolicious-Plugin-ShareHelpers
+version: 0.01

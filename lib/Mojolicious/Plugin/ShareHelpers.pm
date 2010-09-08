@@ -40,7 +40,9 @@ sub share_url {
 		$param->{t} = $args->{text};
 	}
 	elsif ($type eq 'buzz') {
-		$param->{     url} = $args->{url  };
+		$param->{hl      } = $args->{lang };
+		$param->{url     } = $args->{url  };
+		$param->{message } = $args->{text };
 		$param->{imageurl} = $args->{image};
 	}
 	elsif ($type eq 'vkontakte') {
@@ -96,13 +98,13 @@ sub share_button {
 			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 			
 			$button =
-				qq(<a name="fb_share" $param>$args->{button_text}</a>) .
+				qq(<a name="fb_share" $param>$args->{title}</a>) .
 				qq(<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>)
 			;
 		}
 	}
 	elsif ($type eq 'buzz') {
-		my $attr  = { 'button-style' => $args->{type}, locale => $args->{lang}, url => $args->{url}, imageurl => $args->{image} };
+		my $attr  = { 'button-style' => $args->{type}, locale => $args->{lang}, url => $args->{url}, message => $args->{text}, imageurl => $args->{image} };
 		my $param = join ' ', map { qq(data-$_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 		
 		$args->{title} ||= 'Share to Google Buzz';
@@ -114,7 +116,7 @@ sub share_button {
 	}
 	elsif ($type eq 'vkontakte') {
 		my $url   = $args->{url} ? qq({url: "$args->{url}"}) : 'false';
-		my $attr  = { type => $args->{type}, text => $args->{text} };
+		my $attr  = { type => $args->{type}, text => $args->{title} };
 		my $param = join ', ', map { qq($_: "$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 		
 		$button =
@@ -168,17 +170,28 @@ Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, b
 
 =head1 SYNOPSIS
 
-	# Mojolicious
-	$self->plugin('share_helpers');
-	
-	# Mojolicious::Lite
-	plugin 'share_helperes';
-	
-	# share urls:
-	<a href="<%= share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
-	<a href="<%= share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
-	<a href="<%= share_url 'buzz',      url => $url, img  => $img %>">Share to Google Buzz</a>
-	<a href="<%= share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
+  # Mojolicious
+  $self->plugin('share_helpers');
+
+  # Mojolicious::Lite
+  plugin 'share_helpers';
+
+  # share urls:
+  <a href="<%= share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
+  <a href="<%= share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
+  <a href="<%= share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
+  <a href="<%= share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
+
+  # share buttons:
+  %= share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
+  %= share_button 'facebook',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
+  %= share_button 'buzz',      url => 'http://mojolicio.us', text => 'Viva la revolution', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
+  %= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
+
+  # generate meta for share
+  %= share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png'
+  %= share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', og => 1, fb_app_id => 1234567890, site_name => 'Site Name'
+
 
 =head1 DESCRIPTION
 

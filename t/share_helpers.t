@@ -34,8 +34,8 @@ $t->get_ok('/facebook')
 $t->get_ok('/buzz')
   ->status_is(200)
   ->content_is(
-	q(http://www.google.com/buzz/post?imageurl=http%3A%2F%2Fmojolicious.org%2Fwebinabox.png&amp;url=http%3A%2F%2Fmojolicio.us) . 
-	q(<a title="Share it" class="google-buzz-button" href="http://www.google.com/buzz/post" data-imageurl="http://mojolicious.org/webinabox.png" data-url="http://mojolicio.us" data-button-style="normal-count"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>) .
+	q(http://www.google.com/buzz/post?imageurl=http%3A%2F%2Fmojolicious.org%2Fwebinabox.png&amp;message=Viva%20la%20revolution%21&amp;url=http%3A%2F%2Fmojolicio.us) .
+	q(<a title="Share it" class="google-buzz-button" href="http://www.google.com/buzz/post" data-imageurl="http://mojolicious.org/webinabox.png" data-url="http://mojolicio.us" data-button-style="normal-count" data-message="Viva la revolution!"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>) .
 	q(<a title="Share to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-url="http://mojolicio.us" data-locale="ru" data-button-style="link"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>)
 );
 
@@ -84,20 +84,20 @@ __DATA__
 @@ facebook.html.ep
 
 %= share_url    'facebook', url => 'http://mojolicio.us', text => 'Viva la revolution!';
-%= share_button 'facebook', url => 'http://mojolicio.us', type => 'button_count', button_text => 'Share it';
+%= share_button 'facebook', url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
 %= share_button 'facebook', url => 'http://mojolicio.us', type => 'icon', fb => 1;
 
 @@ buzz.html.ep
 
-%= share_url    'buzz', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png';
-%= share_button 'buzz', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
+%= share_url    'buzz', url => 'http://mojolicio.us', text => 'Viva la revolution!', image => 'http://mojolicious.org/webinabox.png';
+%= share_button 'buzz', url => 'http://mojolicio.us', text => 'Viva la revolution!', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
 %= share_button 'buzz', url => 'http://mojolicio.us', type => 'link', lang => 'ru';
 
 @@ vkontakte.html.ep
 
 %= share_url    'vkontakte', url => 'http://mojolicio.us';
-%= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', text => 'Save';
-%= share_button 'vkontakte', type => 'custom', text => 'Save';
+%= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
+%= share_button 'vkontakte', type => 'custom', title => 'Save';
 
 @@ meta.html.ep
 

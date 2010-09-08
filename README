@@ -13,14 +13,14 @@ SYNOPSIS
   # share urls:
   <a href="<%= share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
   <a href="<%= share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
-  <a href="<%= share_url 'buzz',      url => $url, img  => $img %>">Share to Google Buzz</a>
+  <a href="<%= share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
   <a href="<%= share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
 
   # share buttons:
-  %= share_button 'twitter', url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
-  %= share_button 'facebook', url => 'http://mojolicio.us', type => 'button_count', button_text => 'Share it';
-  %= share_button 'buzz', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
-  %= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', text => 'Save';
+  %= share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
+  %= share_button 'facebook',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
+  %= share_button 'buzz',      url => 'http://mojolicio.us', text => 'Viva la revolution', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
+  %= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
 
   # generate meta for share
   %= share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png'
