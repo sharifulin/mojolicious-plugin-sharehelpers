@@ -8,7 +8,7 @@ app->log->level('error');
 plugin 'share_helpers';
 
 get '/'   => 'index';
-get "/$_" => $_ for qw(twitter facebook buzz vkontakte meta);
+get "/$_" => $_ for qw(twitter facebook buzz vkontakte mymailru meta);
 
 use Test::More tests => 17;
 use Test::Mojo;
@@ -45,6 +45,14 @@ $t->get_ok('/vkontakte')
 	q(http://vkontakte.ru/share.php?url=http%3A%2F%2Fmojolicio.us) .
 	q(<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button({url: "http://mojolicio.us"}, {text: "Save", type: "round"}));</script>) .
 	q(<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button(false, {text: "Save", type: "custom"}));</script>)
+);
+
+$t->get_ok('/mymailru')
+  ->status_is(200)
+  ->content_is(
+	q(http://connect.mail.ru/share?share_url=http%3A%2F%2Fmojolicio.us) .
+	q(<script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script><a class="mrc__share" type="button_count" href="http://connect.mail.ru/share?share_url=http%3A%2F%2Fmojolicio.us">Save</a>) .
+	q(<script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script><a class="mrc__share" type="button_count" href="http://connect.mail.ru/share">Save</a>)
 );
 
 $t->get_ok('/meta')
@@ -99,6 +107,13 @@ __DATA__
 %= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
 %= share_button 'vkontakte', type => 'custom', title => 'Save';
 
+
+@@ mymailru.html.ep
+
+%= share_url    'mymailru', url => 'http://mojolicio.us';
+%= share_button 'mymailru', url => 'http://mojolicio.us', type => 'button_count', title => 'Save';
+%= share_button 'mymailru', type => 'button_count', title => 'Save';
+
 @@ meta.html.ep
 
 %= share_meta
@@ -109,7 +124,7 @@ __DATA__
 
 %== include 'meta'
 
-% for (qw(twitter facebook buzz vkontakte)) {
+% for (qw(twitter facebook buzz vkontakte mymailru)) {
 <p>
 	<%== include $_ %>
 </p>
