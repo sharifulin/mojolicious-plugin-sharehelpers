@@ -6,7 +6,7 @@ use warnings;
 use Mojo::ByteStream 'b';
 use base 'Mojolicious::Plugin';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 __PACKAGE__->attr(url => sub { +{
 	twitter   => 'http://twitter.com/share',

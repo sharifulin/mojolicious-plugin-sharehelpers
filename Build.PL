@@ -12,7 +12,7 @@ my $builder = Module::Build->new(
 		'Test::More' => 0,
 	},
 	requires => {
-		'Mojolicious' => 0,
+		'Mojolicious' => '0.999929',
 	},
 	add_to_cleanup  => [],
 	meta_merge => {
