@@ -1,6 +1,6 @@
 NAME
 
-Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, My.MailRU)
+Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, MyMailRU)
 
 SYNOPSIS
 

@@ -6,7 +6,7 @@ use warnings;
 use Mojo::ByteStream 'b';
 use base 'Mojolicious::Plugin';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 __PACKAGE__->attr(url => sub { +{
 	twitter   => 'http://twitter.com/share',
@@ -53,8 +53,9 @@ sub share_url {
 		$param->{share_url} = $args->{url};
 	}
 	
+	my @p = grep { $param->{$_} } sort keys %$param;
 	return join '?', $self->url->{ $type },
-		join '&', map { $_ . '=' . b( $param->{$_} )->url_escape } grep { $param->{$_} } sort keys %$param
+		@p ? join '&', map { $_ . '=' . b( $param->{$_} )->url_escape } @p : ()
 	;
 }
 
@@ -129,14 +130,15 @@ sub share_button {
 		;
 	}
 	elsif ($type eq 'mymailru') {
-		my $param = $args->{url} ? '?share_url='.$c->helper(share_url => $type, @_ ) : '';
+		use utf8;
+		my $url = $c->helper(share_url => $type, @_ );
 		
 		$args->{type } ||= '';
 		$args->{title} ||= 'В Мой Мир';
 		
 		$button =
 			qq(<script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script>) .
-			qq(<a class="mrc__share" type="$args->{type}" href="http://connect.mail.ru/share$param">$args->{title}</a>)
+			qq(<a class="mrc__share" type="$args->{type}" href="$url">$args->{title}</a>)
 		;
 	}
 	
@@ -181,7 +183,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, My.MailRU)
+Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, MyMailRU)
 
 =head1 SYNOPSIS
 

@@ -21,10 +21,10 @@ name: Mojolicious-Plugin-ShareHelpers
 provides:
   Mojolicious::Plugin::ShareHelpers:
     file: lib/Mojolicious/Plugin/ShareHelpers.pm
-    version: 0.01
+    version: 0.02
 requires:
   Mojolicious: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/sharifulin/Mojolicious-Plugin-ShareHelpers
-version: 0.01
+version: 0.02
