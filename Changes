@@ -1,6 +1,6 @@
 Revision history for Mojolicious-Plugin-ShareHelpers
 
-0.03  2010-09-24/12:55
+0.03  2010-09-24/12:55 
 	* Fixed version of Mojolcious in Build.PL
 
 0.02  2010-09-24/12:30
