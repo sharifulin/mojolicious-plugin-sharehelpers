@@ -1,7 +1,7 @@
 Build.PL
 Changes
 MANIFEST
-README
+README.pod
 lib/Mojolicious/Plugin/ShareHelpers.pm
 t/share_helpers.t
 Makefile.PL

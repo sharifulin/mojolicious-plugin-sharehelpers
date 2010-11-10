@@ -9,7 +9,7 @@ WriteMakefile
           'VERSION_FROM' => 'lib/Mojolicious/Plugin/ShareHelpers.pm',
           'PREREQ_PM' => {
                            'Test::More' => 0,
-                           'Mojolicious' => '0.999929'
+                           'Mojolicious' => '0.999937'
                          }
         )
 ;

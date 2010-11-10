@@ -6,7 +6,7 @@ use warnings;
 use Mojo::ByteStream 'b';
 use base 'Mojolicious::Plugin';
 
-our $VERSION = '0.03';
+our $VERSION = '0.2';
 
 __PACKAGE__->attr(url => sub { +{
 	twitter   => 'http://twitter.com/share',
@@ -198,7 +198,7 @@ Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, b
   <a href="<%= share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
   <a href="<%= share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
   <a href="<%= share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
-  <a href="<%= share_url 'mymailru',    url => $url %>">Share to Мой Мир</a>
+  <a href="<%= share_url 'mymailru',  url => $url %>">Share to Мой Мир</a>
 
   # share buttons:
   %= share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
@@ -218,25 +218,21 @@ L<Mojolicous::Plugin::ShareHelpers> is a plugin for generate share url, share bu
 
 Plugin adds a C<share_url>, C<share_button>, C<share_meta> helpers to L<Mojolicious>.
 
-Twitter Share L<http://dev.twitter.com/pages/tweet_button>
+=head1 SHARE API
 
-Facebook Share L<http://developers.facebook.com/docs/share>
+=over 5
 
-Google Buzz Share L<http://www.google.com/buzz/api/admin/configPostWidget>
+=item * Twitter Share L<http://dev.twitter.com/pages/tweet_button>
 
-VKontakte Share L<http://vkontakte.ru/pages.php?act=share>
+=item * Facebook Share L<http://developers.facebook.com/docs/share>
 
-My.MailRU Share L<http://api.mail.ru/sites/plugins/share/extended/>
+=item * Google Buzz Share L<http://www.google.com/buzz/api/admin/configPostWidget>
 
-=head2 HELPERS
+=item * VKontakte Share L<http://vkontakte.ru/pages.php?act=share>
 
-<%= share_url %>
+=item * MyMailRU Share L<http://api.mail.ru/sites/plugins/share/extended/>
 
-Generate share url.
-
-<%= share_button %>
-
-Generate share button.
+=back
 
 =head1 METHODS
 

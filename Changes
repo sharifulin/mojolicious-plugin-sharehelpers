@@ -1,5 +1,9 @@
 Revision history for Mojolicious-Plugin-ShareHelpers
 
+0.2   2010-11-11/00:22 
+	* Fixed cpan tester reports
+	* README.pod
+
 0.03  2010-09-24/12:55 
 	* Fixed version of Mojolcious in Build.PL
 

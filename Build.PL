@@ -7,12 +7,12 @@ my $builder = Module::Build->new(
 	license             => 'perl',
 	dist_author         => 'Anatoly Sharifulin <sharifulin@gmail.com>',
 	dist_version_from   => 'lib/Mojolicious/Plugin/ShareHelpers.pm',
-	dist_abstract       => 'for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte)',
+	dist_abstract       => 'for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, MyMailRU)',
 	build_requires => {
 		'Test::More' => 0,
 	},
 	requires => {
-		'Mojolicious' => '0.999929',
+		'Mojolicious' => '0.999937',
 	},
 	add_to_cleanup  => [],
 	meta_merge => {

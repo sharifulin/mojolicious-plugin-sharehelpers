@@ -1,5 +1,5 @@
 ---
-abstract: 'for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte)'
+abstract: 'for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, MyMailRU)'
 author:
   - 'Anatoly Sharifulin <sharifulin@gmail.com>'
 build_requires:
@@ -21,10 +21,10 @@ name: Mojolicious-Plugin-ShareHelpers
 provides:
   Mojolicious::Plugin::ShareHelpers:
     file: lib/Mojolicious/Plugin/ShareHelpers.pm
-    version: 0.03
+    version: 0.2
 requires:
-  Mojolicious: 0.999929
+  Mojolicious: 0.999937
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://github.com/sharifulin/Mojolicious-Plugin-ShareHelpers
-version: 0.03
+version: 0.2
