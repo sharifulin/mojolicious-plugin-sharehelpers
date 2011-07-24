@@ -1,5 +1,11 @@
 Revision history for Mojolicious-Plugin-ShareHelpers
 
+0.5   2011-07-24/15:21
+    * Refactoring code, using Mojolicious 1.17 and higher
+    * Add helper is_share_agent
+    * Add Google Plus button
+    * New tests
+
 0.2   2010-11-11/00:22 
 	* Fixed cpan tester reports
 	* README.pod
