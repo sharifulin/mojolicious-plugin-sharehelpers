@@ -2,14 +2,14 @@
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
-          'PL_FILES' => {},
-          'INSTALLDIRS' => 'site',
-          'NAME' => 'Mojolicious::Plugin::ShareHelpers',
-          'EXE_FILES' => [],
-          'VERSION_FROM' => 'lib/Mojolicious/Plugin/ShareHelpers.pm',
-          'PREREQ_PM' => {
-                           'Test::More' => 0,
-                           'Mojolicious' => '0.999937'
-                         }
-        )
+  'NAME' => 'Mojolicious::Plugin::ShareHelpers',
+  'VERSION_FROM' => 'lib/Mojolicious/Plugin/ShareHelpers.pm',
+  'PREREQ_PM' => {
+                   'Mojolicious' => '1.17',
+                   'Test::More' => 0
+                 },
+  'INSTALLDIRS' => 'site',
+  'EXE_FILES' => [],
+  'PL_FILES' => {}
+)
 ;

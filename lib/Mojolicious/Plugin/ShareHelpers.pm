@@ -4,53 +4,63 @@ use strict;
 use warnings;
 
 use Mojo::ByteStream 'b';
-use base 'Mojolicious::Plugin';
+use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.2';
+our $VERSION = '0.5';
 
-__PACKAGE__->attr(url => sub { +{
-	twitter   => 'http://twitter.com/share',
-	facebook  => 'http://facebook.com/sharer.php',
-	buzz      => 'http://www.google.com/buzz/post',
-	vkontakte => 'http://vkontakte.ru/share.php',
-	mymailru  => 'http://connect.mail.ru/share',
-} });
+our $APP; # for app instance
+
+has url => sub { +{
+	'twitter'   => 'http://twitter.com/share',
+	'facebook'  => 'http://facebook.com/sharer.php',
+	'buzz'      => 'http://www.google.com/buzz/post',
+	'vkontakte' => 'http://vkontakte.ru/share.php',
+	'mymailru'  => 'http://connect.mail.ru/share',
+ 	'google+'   => 'http://plus.google.com',
+} };
 
 sub register {
-	my ($self, $app, $conf) = @_;
+	my($self, $app) = @_;
 	
-	$app->renderer->add_helper( share_url    => sub { $self->share_url   ( @_ ) } );
-	$app->renderer->add_helper( share_button => sub { $self->share_button( @_ ) } );
-	$app->renderer->add_helper( share_meta   => sub { $self->share_meta  ( @_ ) } );
+	$APP = $app;
+	
+	$app->helper( share_url      => sub { $self->share_url     ( @_ ) } );
+	$app->helper( share_button   => sub { $self->share_button  ( @_ ) } );
+	$app->helper( share_meta     => sub { $self->share_meta    ( @_ ) } );
+	$app->helper( is_share_agent => sub { $self->is_share_agent( @_ ) } );
 }
 
 sub share_url {
 	my($self, $c) = (shift, shift);
 	
 	my $type = shift;
-	my $args = @_ ? { @_ } : {};
+	return '' unless $self->_check_type( $type );
 	
-	return $self->log->debug('Bad share type') unless $self->_check_type( $type );
+	my %args = @_;
 	
 	my $param;
 	if ($type eq 'twitter') {
-		$param->{$_} = $args->{$_} for qw(url via text related count lang counturl);
+		$param->{$_} = $args{$_} for qw(url via text related count lang counturl);
 	}
 	elsif ($type eq 'facebook') {
-		$param->{u} = $args->{url };
-		$param->{t} = $args->{text};
+		$param->{u} = $args{url };
+		$param->{t} = $args{text};
 	}
 	elsif ($type eq 'buzz') {
-		$param->{hl      } = $args->{lang };
-		$param->{url     } = $args->{url  };
-		$param->{message } = $args->{text };
-		$param->{imageurl} = $args->{image};
+		$param->{hl      } = $args{lang };
+		$param->{url     } = $args{url  };
+		$param->{message } = $args{text };
+		$param->{imageurl} = $args{image};
 	}
 	elsif ($type eq 'vkontakte') {
-		$param->{url} = $args->{url};
+		$param->{url} = $args{url};
 	}
 	elsif ($type eq 'mymailru') {
-		$param->{share_url} = $args->{url};
+		$param->{share_url} = $args{url};
+	}
+	elsif ($type eq 'google+') {
+		$APP->log->error("Google Plus doen't have share URL, use share_button");
+		return '';
 	}
 	
 	my @p = grep { $param->{$_} } sort keys %$param;
@@ -63,14 +73,14 @@ sub share_button {
 	my($self, $c) = (shift, shift);
 	
 	my $type = shift;
-	my $args = @_ ? { @_ } : {};
+	return '' unless $self->_check_type( $type );
 	
-	return $self->log->debug('Bad share type') unless $self->_check_type( $type );
+	my %args = @_;
 	
 	my $button;
 	if ($type eq 'twitter') {
-		if ($args->{iframe}) {
-			my $url    = $c->helper(share_url => $type, @_ );
+		if ($args{iframe}) {
+			my $url    = $c->share_url( $type, @_ );
 			my($param) = $url =~ /.*\?(.*)/;
 			
 			$button =
@@ -79,8 +89,8 @@ sub share_button {
 			;
 		}
 		else {
-			my $attr; push @$attr, qq(data-$_="$args->{$_}")
-				for grep { $args->{$_} } qw(url via text related count lang counturl);
+			my $attr; push @$attr, qq(data-$_="$args{$_}")
+				for grep { $args{$_} } qw(url via text related count lang counturl);
 			my $param = join ' ', @$attr;
 			
 			$button =
@@ -90,8 +100,8 @@ sub share_button {
 		}
 	}
 	elsif ($type eq 'facebook') {
-		if ($args->{fb}) {
-			my $attr  = { type => $args->{type}, href => $args->{url}, class => $args->{class} };
+		if ($args{fb}) {
+			my $attr  = { type => $args{type}, href => $args{url}, class => $args{class} };
 			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 			
 			$button =
@@ -99,29 +109,29 @@ sub share_button {
 			;
 		}
 		else {
-			my $attr  = { type => $args->{type}, share_url => $args->{url} };
+			my $attr  = { type => $args{type}, share_url => $args{url} };
 			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 			
 			$button =
-				qq(<a name="fb_share" $param>$args->{title}</a>) .
+				qq(<a name="fb_share" $param>$args{title}</a>) .
 				qq(<script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>)
 			;
 		}
 	}
 	elsif ($type eq 'buzz') {
-		my $attr  = { 'button-style' => $args->{type}, locale => $args->{lang}, url => $args->{url}, message => $args->{text}, imageurl => $args->{image} };
+		my $attr  = { 'button-style' => $args{type}, locale => $args{lang}, url => $args{url}, message => $args{text}, imageurl => $args{image} };
 		my $param = join ' ', map { qq(data-$_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 		
-		$args->{title} ||= 'Share to Google Buzz';
+		$args{title} ||= 'Share to Google Buzz';
 		
 		$button =
-			qq(<a title="$args->{title}" class="google-buzz-button" href="http://www.google.com/buzz/post" $param></a>) .
+			qq(<a title="$args{title}" class="google-buzz-button" href="http://www.google.com/buzz/post" $param></a>) .
 			qq(<script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>)
 		;
 	}
 	elsif ($type eq 'vkontakte') {
-		my $url   = $args->{url} ? qq({url: "$args->{url}"}) : 'false';
-		my $attr  = { type => $args->{type}, text => $args->{title} };
+		my $url   = $args{url} ? qq({url: "$args{url}"}) : 'false';
+		my $attr  = { type => $args{type}, text => $args{title} };
 		my $param = join ', ', map { qq($_: "$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 		
 		$button =
@@ -131,48 +141,95 @@ sub share_button {
 	}
 	elsif ($type eq 'mymailru') {
 		use utf8;
-		my $url = $c->helper(share_url => $type, @_ );
+		my $url = $c->share_url( $type, @_ );
 		
-		$args->{type } ||= '';
-		$args->{title} ||= 'В Мой Мир';
+		$args{type } ||= '';
+		$args{title} ||= 'В Мой Мир';
 		
 		$button =
 			qq(<script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script>) .
-			qq(<a class="mrc__share" type="$args->{type}" href="$url">$args->{title}</a>)
+			qq(<a class="mrc__share" type="$args{type}" href="$url">$args{title}</a>)
+		;
+	}
+	elsif ($type eq 'google+') {
+		my $attr  = { size => $args{size}, href => $args{url}, count => $args{count}, callback => $args{callback} };
+		my $param = join ' ', 'class="g-plusone"', map { qq(data-$_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
+		
+		my $script = join ', ', map { qq($_: "$args{$_}") } grep { $args{$_} } qw(lang parsetags);
+		
+		$button =
+			(
+				$args{noscript}
+					? ''
+					: qq(<script type="text/javascript" src="https://apis.google.com/js/plusone.js">) . ( $script ? "{$script}" : '' ) . qq(</script>\n)
+			) .
+			qq(<div $param></div>)
 		;
 	}
 	
-	return b( $button );
+	return $button;
 }
 
 sub share_meta {
 	my($self, $c) = (shift, shift);
+	my %args = @_;
 	
-	my $args = @_ ? { @_ } : {};
-	
-	return b( join "\n",
+	return join "\n",
 		@_ ? qq(<meta name="medium" content="mult"/>) : '',
 		
-		$args->{og} ? (
-			$args->{fb_app_id} ? qq(<meta property="fb:app_id" content="$args->{fb_app_id}"/>) : (),
-			qq(<meta property="og:site_name" content="$args->{site_name}" />),
+		$args{og} ? (
+			$args{fb_app_id} ? qq(<meta property="fb:app_id" content="$args{fb_app_id}"/>) : (),
+			qq(<meta property="og:site_name" content="$args{site_name}" />),
 			qq(<meta property="og:type" content="website" />),
-			map { $args->{$_} ? qq(<meta property="og:$_" content="$args->{$_}"/>) : () }
+			map { $args{$_} ? qq(<meta property="og:$_" content="$args{$_}"/>) : () }
 			qw(image title description)
 		) : (),
 		
-		$args->{title} ? qq(<meta name="title" content="$args->{title}"/>) : (),
-		$args->{description} ? qq(<meta name="description" content="$args->{description}"/>) : (),
-		$args->{image} ? qq(<link rel="image_src" href="$args->{image}" />) : (),
-		$args->{url} ? qq(<link rel="target_url" href="$args->{url}"/>) : (),
-	);
+		$args{title} ? qq(<meta name="title" content="$args{title}"/>) : (),
+		$args{description} ? qq(<meta name="description" content="$args{description}"/>) : (),
+		$args{image} ? qq(<link rel="image_src" href="$args{image}" />) : (),
+		$args{url} ? (
+			qq(<link rel="target_url" href="$args{url}"/>),
+			qq(<link rel="canonical" href="$args{url}"/>),
+		) : (),
+	;
+}
+
+sub is_share_agent {
+	my($self, $c) = (shift, shift);
+	
+	my $ua    = $c->req->headers->user_agent;
+	my $range = $c->req->headers->header('Range');
+	my $enc   = $c->req->headers->header('Accept-Encoding');
+	
+	my $agent =
+		$ua =~ /facebookexternalhit/ &&  $range &&  $enc eq 'gzip' ? 'facebook'  :
+		$ua eq 'Mozilla'             && !$range &&  $enc eq 'gzip' ? 'buzz'      :
+		$ua =~ /Mozilla/             &&  $range &&  $enc =~ /gzip/ ? 'vkontakte' : # XXX: add cp1251
+		''
+	;
+	
+	$APP->log->debug(qq(Found the share agent "$agent")) if $agent;
+	
+	return $agent;
 }
 
 sub _check_type {
-	my $self = shift;
-	my $type = shift;
+	my $self  = shift;
+	my $type  = shift || '';
 	
-	return $type && exists $self->url->{ $type } ? $type : undef;
+	if (!$type) {
+		$APP->log->debug('Missed the share type');
+		return;
+	}
+	elsif (! exists $self->url->{ $type }) {
+		my $types = join ', ', sort keys %{$self->url};
+		$APP->log->debug(qq(Bad share type "$type", support types of share: $types));
+		return;
+	}
+	else {
+		return $type;
+	}
 }
 
 1;
@@ -183,7 +240,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, button and meta (Twitter, Facebook, Buzz, VKontakte, MyMailRU)
+Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls, buttons and meta for Twitter, Facebook, Google Buzz, VKontakte, MyMailRU and Google Plus
 
 =head1 SYNOPSIS
 
@@ -194,29 +251,35 @@ Mojolicious::Plugin::ShareHelpers - Mojolicious Plugin for generate share url, b
   plugin 'share_helpers';
 
   # share urls:
-  <a href="<%= share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
-  <a href="<%= share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
-  <a href="<%= share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
-  <a href="<%= share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
-  <a href="<%= share_url 'mymailru',  url => $url %>">Share to Мой Мир</a>
+  <a href="<%== share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
+  <a href="<%== share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
+  <a href="<%== share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
+  <a href="<%== share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
+  <a href="<%== share_url 'mymailru',  url => $url %>">Share to Мой Мир</a>
 
   # share buttons:
-  %= share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
-  %= share_button 'facebook',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
-  %= share_button 'buzz',      url => 'http://mojolicio.us', text => 'Viva la revolution', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
-  %= share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
-  %= share_button 'mymailru',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share to Мой Мир';
-
+  %== share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
+  %== share_button 'facebook',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
+  %== share_button 'buzz',      url => 'http://mojolicio.us', text => 'Viva la revolution', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
+  %== share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
+  %== share_button 'mymailru',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share to Мой Мир';
+  
+  # google plus button +1:
+  %== share_button 'google+', lang => 'ru'
+  %== share_button 'google+', noscript => 1, size => 'tall', url => 'http://mojolicio.us'
+  
   # generate meta for share
-  %= share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png'
-  %= share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', og => 1, fb_app_id => 1234567890, site_name => 'Site Name'
-
+  %== share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png'
+  %== share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', og => 1, fb_app_id => 1234567890, site_name => 'Site Name'
+  
+  # check share agent, it may returns string such as 'facebook' or 'twitter' or 'vkontakte' or empty string
+  %= is_share_agent
 
 =head1 DESCRIPTION
 
 L<Mojolicous::Plugin::ShareHelpers> is a plugin for generate share url, share button and share meta (Twitter, Facebook, VKontakte).
 
-Plugin adds a C<share_url>, C<share_button>, C<share_meta> helpers to L<Mojolicious>.
+Plugin adds a C<share_url>, C<share_button>, C<share_meta> and C<is_share_agent> helpers to L<Mojolicious>.
 
 =head1 SHARE API
 
@@ -231,6 +294,8 @@ Plugin adds a C<share_url>, C<share_button>, C<share_meta> helpers to L<Mojolici
 =item * VKontakte Share L<http://vkontakte.ru/pages.php?act=share>
 
 =item * MyMailRU Share L<http://api.mail.ru/sites/plugins/share/extended/>
+
+=item * Google Plus L<http://code.google.com/intl/ru-RU/apis/+1button/>
 
 =back
 
@@ -289,7 +354,7 @@ L<http://search.cpan.org/dist/Mojolicious-plugin-sharehelpers>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright (C) 2010 by Anatoly Sharifulin.
+Copyright (C) 2010-2011 by Anatoly Sharifulin.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
