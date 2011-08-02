@@ -6,7 +6,7 @@ use warnings;
 use Mojo::ByteStream 'b';
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.5';
+our $VERSION = '0.51';
 
 our $APP; # for app instance
 

@@ -1,5 +1,8 @@
 Revision history for Mojolicious-Plugin-ShareHelpers
 
+0.51  2011-08-02/11:39
+	* Add MOJO_NO_BONJOUR to the test
+
 0.5   2011-07-24/15:21
     * Refactoring code, using Mojolicious 1.17 and higher
     * Add helper is_share_agent
