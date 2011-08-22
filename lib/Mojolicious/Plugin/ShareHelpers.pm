@@ -6,7 +6,7 @@ use warnings;
 use Mojo::ByteStream 'b';
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 our $APP; # for app instance
 
@@ -173,6 +173,8 @@ sub share_button {
 sub share_meta {
 	my($self, $c) = (shift, shift);
 	my %args = @_;
+	
+	$_ = b($_)->xml_escape->to_string for grep {$_} @args{qw(title description)};
 	
 	return join "\n",
 		@_ ? qq(<meta name="medium" content="mult"/>) : '',

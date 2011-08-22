@@ -112,10 +112,10 @@ $t->get_ok('/meta')
 <meta property="og:site_name" content="Site Name" />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="http://mojolicious.org/webinabox.png"/>
-<meta property="og:title" content="Mojolicious"/>
-<meta property="og:description" content="Viva la revolition!"/>
-<meta name="title" content="Mojolicious"/>
-<meta name="description" content="Viva la revolition!"/>
+<meta property="og:title" content="&quot;Mojolicious&quot;"/>
+<meta property="og:description" content="&quot;Viva la revolition!&quot;"/>
+<meta name="title" content="&quot;Mojolicious&quot;"/>
+<meta name="description" content="&quot;Viva la revolition!&quot;"/>
 <link rel="image_src" href="http://mojolicious.org/webinabox.png" />
 <link rel="target_url" href="http://mojolicio.us"/>
 <link rel="canonical" href="http://mojolicio.us"/>
@@ -211,7 +211,7 @@ __DATA__
 
 %== share_meta;
 %== share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png';
-%== share_meta title => 'Mojolicious', description => 'Viva la revolition!', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', og => 1, fb_app_id => 1234567890, site_name => 'Site Name';
+%== share_meta title => '"Mojolicious"', description => '"Viva la revolition!"', url => 'http://mojolicio.us', image => 'http://mojolicious.org/webinabox.png', og => 1, fb_app_id => 1234567890, site_name => 'Site Name';
 
 @@ index.html.ep
 
