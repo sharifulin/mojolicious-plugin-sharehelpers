@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-use lib qw(lib /tk/lib /tk/mojo/lib);
+use lib qw(lib ../mojo/lib);
 
 BEGIN { $ENV{MOJO_NO_BONJOUR}++ };
 use Mojolicious::Lite;
