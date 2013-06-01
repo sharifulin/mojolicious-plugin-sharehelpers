@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls, buttons and meta for Twitter, Facebook, Google Buzz, VKontakte, MyMailRU and Google Plus
+Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls, buttons and meta for Twitter, Facebook, VK, MyMailRU and Google Plus
 
 =head1 SYNOPSIS
 
@@ -15,14 +15,12 @@ Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls
   # share urls:
   <a href="<%== share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
   <a href="<%== share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
-  <a href="<%== share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
   <a href="<%== share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
   <a href="<%== share_url 'mymailru',  url => $url %>">Share to Мой Мир</a>
 
   # share buttons:
   %== share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
   %== share_button 'facebook',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
-  %== share_button 'buzz',      url => 'http://mojolicio.us', text => 'Viva la revolution', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
   %== share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
   %== share_button 'mymailru',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share to Мой Мир';
   
@@ -51,9 +49,7 @@ Plugin adds a C<share_url>, C<share_button>, C<share_meta> and C<is_share_agent>
 
 =item * Facebook Share L<http://developers.facebook.com/docs/share>
 
-=item * Google Buzz Share L<http://www.google.com/buzz/api/admin/configPostWidget>
-
-=item * VKontakte Share L<http://vkontakte.ru/pages.php?act=share>
+=item * VK Share L<http://vkontakte.ru/pages.php?act=share>
 
 =item * MyMailRU Share L<http://api.mail.ru/sites/plugins/share/extended/>
 

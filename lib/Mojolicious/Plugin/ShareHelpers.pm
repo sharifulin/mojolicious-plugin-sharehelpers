@@ -270,7 +270,7 @@ Plugin adds a C<share_url>, C<share_button>, C<share_meta> and C<is_share_agent>
 
 =item * Facebook Share L<http://developers.facebook.com/docs/share>
 
-=item * VKontakte Share L<http://vk.com/pages.php?act=share>
+=item * VK Share L<http://vk.com/pages.php?act=share>
 
 =item * MyMailRU Share L<http://api.mail.ru/sites/plugins/share/extended/>
 
