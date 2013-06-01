@@ -6,14 +6,13 @@ use warnings;
 use Mojo::ByteStream 'b';
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.52';
+our $VERSION = '0.6';
 
 our $APP; # for app instance
 
 has url => sub { +{
 	'twitter'   => 'http://twitter.com/share',
 	'facebook'  => 'http://facebook.com/sharer.php',
-	'buzz'      => 'http://www.google.com/buzz/post',
 	'vkontakte' => 'http://vkontakte.ru/share.php',
 	'mymailru'  => 'http://connect.mail.ru/share',
  	'google+'   => 'http://plus.google.com',

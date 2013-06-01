@@ -10,14 +10,14 @@ plugin 'share_helpers';
 
 get '/'    => 'index';
 get '/bad' => 'bad';
-get "/$_"  => $_ for qw(twitter facebook buzz vkontakte mymailru google+ google+all meta);
+get "/$_"  => $_ for qw(twitter facebook vkontakte mymailru google+ google+all meta);
 
 get '/ua'  => sub {
 	my $self = shift;
 	$self->render('ua', check => $self->is_share_agent);
 };
 
-use Test::More tests => 41;
+use Test::More;
 use Test::Mojo;
 
 my $t = Test::Mojo->new;
@@ -42,15 +42,6 @@ $t->get_ok('/facebook')
 	q(http://facebook.com/sharer.php?t=Viva%20la%20revolution%21&u=http%3A%2F%2Fmojolicio.us),
 	q(<a name="fb_share" share_url="http://mojolicio.us" type="button_count">Share it</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>),
 	q(<fb:share-button href="http://mojolicio.us" type="icon"></fb:share-button>),
-	''
-);
-
-$t->get_ok('/buzz')
-  ->status_is(200)
-  ->content_is(join "\n",
-	q(http://www.google.com/buzz/post?imageurl=http%3A%2F%2Fmojolicious.org%2Fwebinabox.png&message=Viva%20la%20revolution%21&url=http%3A%2F%2Fmojolicio.us),
-	q(<a title="Share it" class="google-buzz-button" href="http://www.google.com/buzz/post" data-imageurl="http://mojolicious.org/webinabox.png" data-url="http://mojolicio.us" data-button-style="normal-count" data-message="Viva la revolution!"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>),
-	q(<a title="Share to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-url="http://mojolicio.us" data-locale="ru" data-button-style="link"></a><script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>),
 	''
 );
 
@@ -141,15 +132,12 @@ $t->get_ok('/ua', {'User-Agent' => 'facebookexternalhit', 'Range' => 1, 'Accept-
   ->content_is("facebook\n", 'Facebook share agent')
 ;
 
-$t->get_ok('/ua', {'User-Agent' => 'Mozilla', 'Accept-Encoding' => 'gzip'})
-  ->status_is(200)
-  ->content_is("buzz\n", 'Google Buzz share agent')
-;
-
 $t->get_ok('/ua', {'User-Agent' => 'Mozilla', 'Range' => 1, 'Accept-Encoding' => 'gzip, deflate'})
   ->status_is(200)
   ->content_is("vkontakte\n", 'VKontakte share agent')
 ;
+
+done_testing;
 
 __DATA__
 
@@ -172,12 +160,6 @@ __DATA__
 %== share_url    'facebook', url => 'http://mojolicio.us', text => 'Viva la revolution!';
 %== share_button 'facebook', url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
 %== share_button 'facebook', url => 'http://mojolicio.us', type => 'icon', fb => 1;
-
-@@ buzz.html.ep
-
-%== share_url    'buzz', url => 'http://mojolicio.us', text => 'Viva la revolution!', image => 'http://mojolicious.org/webinabox.png';
-%== share_button 'buzz', url => 'http://mojolicio.us', text => 'Viva la revolution!', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
-%== share_button 'buzz', url => 'http://mojolicio.us', type => 'link', lang => 'ru';
 
 @@ vkontakte.html.ep
 
@@ -217,7 +199,7 @@ __DATA__
 
 %== include 'meta'
 
-% for (qw(twitter facebook buzz vkontakte mymailru)) {
+% for (qw(twitter facebook vkontakte mymailru)) {
 <p>
 	%== include $_
 </p>
