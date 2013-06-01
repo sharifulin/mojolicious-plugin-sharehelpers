@@ -48,9 +48,9 @@ $t->get_ok('/facebook')
 $t->get_ok('/vkontakte')
   ->status_is(200)
   ->content_is(join "\n",
-	q(http://vkontakte.ru/share.php?url=http%3A%2F%2Fmojolicio.us),
-	q(<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button({url: "http://mojolicio.us"}, {text: "Save", type: "round"}));</script>),
-	q(<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button(false, {text: "Save", type: "custom"}));</script>),
+	q(http://vk.com/share.php?url=http%3A%2F%2Fmojolicio.us),
+	q(<script type="text/javascript" src="http://vk.com/js/api/share.js?146" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button({url: "http://mojolicio.us"}, {text: "Save", type: "round"}));</script>),
+	q(<script type="text/javascript" src="http://vk.com/js/api/share.js?146" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button(false, {text: "Save", type: "custom"}));</script>),
 	''
 );
 

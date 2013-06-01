@@ -13,7 +13,7 @@ our $APP; # for app instance
 has url => sub { +{
 	'twitter'   => 'http://twitter.com/share',
 	'facebook'  => 'http://facebook.com/sharer.php',
-	'vkontakte' => 'http://vkontakte.ru/share.php',
+	'vkontakte' => 'http://vk.com/share.php',
 	'mymailru'  => 'http://connect.mail.ru/share',
  	'google+'   => 'http://plus.google.com',
 } };
@@ -44,12 +44,6 @@ sub share_url {
 	elsif ($type eq 'facebook') {
 		$param->{u} = $args{url };
 		$param->{t} = $args{text};
-	}
-	elsif ($type eq 'buzz') {
-		$param->{hl      } = $args{lang };
-		$param->{url     } = $args{url  };
-		$param->{message } = $args{text };
-		$param->{imageurl} = $args{image};
 	}
 	elsif ($type eq 'vkontakte') {
 		$param->{url} = $args{url};
@@ -117,24 +111,13 @@ sub share_button {
 			;
 		}
 	}
-	elsif ($type eq 'buzz') {
-		my $attr  = { 'button-style' => $args{type}, locale => $args{lang}, url => $args{url}, message => $args{text}, imageurl => $args{image} };
-		my $param = join ' ', map { qq(data-$_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
-		
-		$args{title} ||= 'Share to Google Buzz';
-		
-		$button =
-			qq(<a title="$args{title}" class="google-buzz-button" href="http://www.google.com/buzz/post" $param></a>) .
-			qq(<script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>)
-		;
-	}
 	elsif ($type eq 'vkontakte') {
 		my $url   = $args{url} ? qq({url: "$args{url}"}) : 'false';
 		my $attr  = { type => $args{type}, text => $args{title} };
 		my $param = join ', ', map { qq($_: "$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
 		
 		$button =
-			qq(<script type="text/javascript" src="http://vkontakte.ru/js/api/share.js?9" charset="windows-1251"></script>) .
+			qq(<script type="text/javascript" src="http://vk.com/js/api/share.js?146" charset="windows-1251"></script>) .
 			qq(<script type="text/javascript">document.write(VK.Share.button($url, {$param}));</script>)
 		;
 	}
@@ -205,7 +188,6 @@ sub is_share_agent {
 	
 	my $agent =
 		$ua =~ /facebookexternalhit/ &&  $range &&  $enc eq 'gzip' ? 'facebook'  :
-		$ua eq 'Mozilla'             && !$range &&  $enc eq 'gzip' ? 'buzz'      :
 		$ua =~ /Mozilla/             &&  $range &&  $enc =~ /gzip/ ? 'vkontakte' : # XXX: add cp1251
 		''
 	;
@@ -241,7 +223,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls, buttons and meta for Twitter, Facebook, Google Buzz, VKontakte, MyMailRU and Google Plus
+Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls, buttons and meta for Twitter, Facebook, VKontakte, MyMailRU and Google Plus
 
 =head1 SYNOPSIS
 
@@ -254,14 +236,12 @@ Mojolicious::Plugin::ShareHelpers - A Mojolicious Plugin for generate share urls
   # share urls:
   <a href="<%== share_url 'twitter',   url => $url, text => $text, via => 'sharifulin' %>">Share to Twitter</a>
   <a href="<%== share_url 'facebook',  url => $url, text => $text %>">Share to Facebook</a>
-  <a href="<%== share_url 'buzz',      url => $url, text => $text, image => $image %>">Share to Google Buzz</a>
   <a href="<%== share_url 'vkontakte', url => $url %>">Share to ВКонтакте</a>
   <a href="<%== share_url 'mymailru',  url => $url %>">Share to Мой Мир</a>
 
   # share buttons:
   %== share_button 'twitter',   url => 'http://mojolicio.us', text => 'Viva la revolution!', via => 'sharifulin';
   %== share_button 'facebook',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share it';
-  %== share_button 'buzz',      url => 'http://mojolicio.us', text => 'Viva la revolution', image => 'http://mojolicious.org/webinabox.png', type => 'normal-count', title => 'Share it';
   %== share_button 'vkontakte', url => 'http://mojolicio.us', type => 'round', title => 'Save';
   %== share_button 'mymailru',  url => 'http://mojolicio.us', type => 'button_count', title => 'Share to Мой Мир';
   
@@ -290,9 +270,7 @@ Plugin adds a C<share_url>, C<share_button>, C<share_meta> and C<is_share_agent>
 
 =item * Facebook Share L<http://developers.facebook.com/docs/share>
 
-=item * Google Buzz Share L<http://www.google.com/buzz/api/admin/configPostWidget>
-
-=item * VKontakte Share L<http://vkontakte.ru/pages.php?act=share>
+=item * VKontakte Share L<http://vk.com/pages.php?act=share>
 
 =item * MyMailRU Share L<http://api.mail.ru/sites/plugins/share/extended/>
 
