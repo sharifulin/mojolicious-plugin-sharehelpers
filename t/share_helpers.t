@@ -80,7 +80,7 @@ $t->get_ok('/google+all')
 <div class="g-plusone"></div>
 <div class="g-plusone" data-href="http://mojolicio.us" data-size="tall"></div>
 <div class="g-plusone" data-count="false" data-href="http://mojolicio.us" data-size="standard"></div>
-<div class="g-plusone" data-count="false" data-callback="GooglePlusCallback" data-href="http://mojolicio.us" data-size="standard"></div>
+<div class="g-plusone" data-callback="GooglePlusCallback" data-count="false" data-href="http://mojolicio.us" data-size="standard"></div>
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: "ru"}</script>
 <div class="g-plusone" data-size="small"></div>
 <script type="text/javascript" src="https://apis.google.com/js/plusone.js">{lang: "ru", parsetags: "explicit"}</script>
