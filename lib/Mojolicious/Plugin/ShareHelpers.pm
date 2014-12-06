@@ -95,7 +95,7 @@ sub share_button {
 	elsif ($type eq 'facebook') {
 		if ($args{fb}) {
 			my $attr  = { type => $args{type}, href => $args{url}, class => $args{class} };
-			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
+			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } sort keys %$attr;
 			
 			$button =
 				qq(<fb:share-button $param></fb:share-button>)
@@ -103,7 +103,7 @@ sub share_button {
 		}
 		else {
 			my $attr  = { type => $args{type}, share_url => $args{url} };
-			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
+			my $param = join ' ', map { qq($_="$attr->{$_}") } grep { $attr->{$_} } sort keys %$attr;
 			
 			$button =
 				qq(<a name="fb_share" $param>$args{title}</a>) .
@@ -114,7 +114,7 @@ sub share_button {
 	elsif ($type eq 'vkontakte') {
 		my $url   = $args{url} ? qq({url: "$args{url}"}) : 'false';
 		my $attr  = { type => $args{type}, text => $args{title} };
-		my $param = join ', ', map { qq($_: "$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
+		my $param = join ', ', map { qq($_: "$attr->{$_}") } grep { $attr->{$_} } sort keys %$attr;
 		
 		$button =
 			qq(<script type="text/javascript" src="http://vk.com/js/api/share.js?146" charset="windows-1251"></script>) .
@@ -135,7 +135,7 @@ sub share_button {
 	}
 	elsif ($type eq 'google+') {
 		my $attr  = { size => $args{size}, href => $args{url}, count => $args{count}, callback => $args{callback} };
-		my $param = join ' ', 'class="g-plusone"', map { qq(data-$_="$attr->{$_}") } grep { $attr->{$_} } keys %$attr;
+		my $param = join ' ', 'class="g-plusone"', map { qq(data-$_="$attr->{$_}") } grep { $attr->{$_} } sort keys %$attr;
 		
 		my $script = join ', ', map { qq($_: "$args{$_}") } grep { $args{$_} } qw(lang parsetags);
 		
