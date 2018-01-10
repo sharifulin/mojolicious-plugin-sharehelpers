@@ -30,17 +30,17 @@ $t->get_ok('/bad')
 $t->get_ok('/twitter')
   ->status_is(200)
   ->content_is(join "\n",
-	q(http://twitter.com/share?text=Viva%20la%20revolution%21&url=http%3A%2F%2Fmojolicio.us),
-	q(<a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mojolicio.us" data-via="sharifulin" data-text="Viva la revolution!">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>),
-	q(<iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:130px; height:50px;" src="http://platform.twitter.com/widgets/tweet_button.html?text=Viva%20la%20revolution%21&url=http%3A%2F%2Fmojolicio.us"></iframe>),
+	q(https://twitter.com/share?text=Viva%20la%20revolution%21&url=http%3A%2F%2Fmojolicio.us),
+	q(<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://mojolicio.us" data-via="sharifulin" data-text="Viva la revolution!">Tweet</a><script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>),
+	q(<iframe allowtransparency="true" frameborder="0" scrolling="no" style="width:130px; height:50px;" src="https://platform.twitter.com/widgets/tweet_button.html?text=Viva%20la%20revolution%21&url=http%3A%2F%2Fmojolicio.us"></iframe>),
 	''
 );
 
 $t->get_ok('/facebook')
   ->status_is(200)
   ->content_is(join "\n",
-	q(http://facebook.com/sharer.php?t=Viva%20la%20revolution%21&u=http%3A%2F%2Fmojolicio.us),
-	q(<a name="fb_share" share_url="http://mojolicio.us" type="button_count">Share it</a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>),
+	q(https://facebook.com/sharer.php?t=Viva%20la%20revolution%21&u=http%3A%2F%2Fmojolicio.us),
+	q(<a name="fb_share" share_url="http://mojolicio.us" type="button_count">Share it</a><script src="https://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>),
 	q(<fb:share-button href="http://mojolicio.us" type="icon"></fb:share-button>),
 	''
 );
@@ -48,18 +48,18 @@ $t->get_ok('/facebook')
 $t->get_ok('/vkontakte')
   ->status_is(200)
   ->content_is(join "\n",
-	q(http://vk.com/share.php?url=http%3A%2F%2Fmojolicio.us),
-	q(<script type="text/javascript" src="http://vk.com/js/api/share.js?146" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button({url: "http://mojolicio.us"}, {text: "Save", type: "round"}));</script>),
-	q(<script type="text/javascript" src="http://vk.com/js/api/share.js?146" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button(false, {text: "Save", type: "custom"}));</script>),
+	q(https://vk.com/share.php?url=http%3A%2F%2Fmojolicio.us),
+	q(<script type="text/javascript" src="https://vk.com/js/api/share.js?146" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button({url: "http://mojolicio.us"}, {text: "Save", type: "round"}));</script>),
+	q(<script type="text/javascript" src="https://vk.com/js/api/share.js?146" charset="windows-1251"></script><script type="text/javascript">document.write(VK.Share.button(false, {text: "Save", type: "custom"}));</script>),
 	''
 );
 
 $t->get_ok('/mymailru')
   ->status_is(200)
   ->content_is(join "\n",
-	q(http://connect.mail.ru/share?share_url=http%3A%2F%2Fmojolicio.us),
-	q(<script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script><a class="mrc__share" type="button_count" href="http://connect.mail.ru/share?share_url=http%3A%2F%2Fmojolicio.us">Save</a>),
-	q(<script src="http://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script><a class="mrc__share" type="button_count" href="http://connect.mail.ru/share">Save</a>),
+	q(https://connect.mail.ru/share?share_url=http%3A%2F%2Fmojolicio.us),
+	q(<script src="https://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script><a class="mrc__share" type="button_count" href="https://connect.mail.ru/share?share_url=http%3A%2F%2Fmojolicio.us">Save</a>),
+	q(<script src="https://cdn.connect.mail.ru/js/share/2/share.js" type="text/javascript"></script><a class="mrc__share" type="button_count" href="https://connect.mail.ru/share">Save</a>),
 	''
 );
 
